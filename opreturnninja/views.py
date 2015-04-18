@@ -24,15 +24,18 @@ def api_view(request):
         sent = False
         while not sent:
             try:
-                s = socket.create_connection(random.choice(list(ELECTRUM_SERVERS.items())))
+                server = random.choice(list(ELECTRUM_SERVERS.items()))
+                s = socket.create_connection(server)
                 s.send(b'{"id":"0", "method":"blockchain.transaction.broadcast", "params":["' + params[0].encode() + b'"]}\n')
                 r = {'result': s.recv(1024)[:-1].decode(), 'error': None, 'id': request.json_body['id']}  # the slice is to remove the trailing new line
                 print(r)
                 return r
             except ConnectionRefusedError as e:
-                print(e)
+                print(e, server)
             except socket.gaierror as e:
-                print(e)
+                print(e, server)
+            except Exception as e:
+                print(e, server)
     return {
         'result': None,
         'error': 'RPC Request Unknown',
