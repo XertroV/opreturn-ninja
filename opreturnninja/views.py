@@ -2,17 +2,7 @@ import json
 
 import random
 
-from decimal import Decimal
-
-from binascii import unhexlify
-
-from time import sleep
-
-from pycoin.tx import Tx
-
 from pyramid.view import view_config
-
-from .rpc_commands import whitelist, custom_methods
 
 from .constants import ELECTRUM_SERVERS
 
