@@ -10,28 +10,6 @@ from bitcoin.rpc import RawProxy, DEFAULT_USER_AGENT
 
 import socket
 
-class RPC(RawProxy):
-
-    def passJson(self, json_to_dump):
-        self.__dict__['_RawProxy__conn'].request('POST', self.__dict__['_RawProxy__url'].path, json.dumps(json_to_dump),
-                            {'Host': self.__dict__['_RawProxy__url'].hostname,
-                             'User-Agent': DEFAULT_USER_AGENT,
-                             'Authorization': self.__dict__['_RawProxy__auth_header'],
-                             'Content-type': 'application/json'})
-        return self._get_response()
-
-    def __getattr__(self, name):
-        if name == '__conn':
-            return self.__conn
-        return RawProxy.__getattr__(self, name)
-
-
-rpc = RPC()
-
-def setupRpc():
-    global rpc
-    rpc = RPC()
-setupRpc()
 
 @view_config(route_name='api', renderer='json')
 def api_view(request):
