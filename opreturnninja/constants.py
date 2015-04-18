@@ -1,5 +1,5 @@
 ELECTRUM_SERVERS = {
-    'ecdsa.org': 50001,
+    #'ecdsa.org': 50001,
     'ecdsa.net': 50001,  # good
     #'electrum.hachre.de': 50001,
     #'electrum.novit.ro': 50001,

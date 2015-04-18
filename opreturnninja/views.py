@@ -15,12 +15,12 @@ import socket
 ip_last_request_map = defaultdict(lambda: 0)
 
 def rate_limit(f):
-    def inner(request):
+    def inner(request, *args, **kwargs):
         global ip_last_request_map
-        if time() > ip_last_request_map[request.client_addr] + 2:
+        if time() < ip_last_request_map[request.client_addr] + 2:
             return {'error': 'requested too soon; 2 seconds required between calls.'}
-        ip_last_request_map[request.client_addr] = time.time()
-        return f(request)
+        ip_last_request_map[request.client_addr] = time()
+        return f(request, *args, **kwargs)
     return inner
 
 
