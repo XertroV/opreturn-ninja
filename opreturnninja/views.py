@@ -1,6 +1,8 @@
-import json
+from collections import defaultdict
 
 import random
+
+from time import time
 
 from pyramid.view import view_config
 
@@ -10,10 +12,21 @@ from bitcoin.rpc import RawProxy, DEFAULT_USER_AGENT
 
 import socket
 
+ip_last_request_map = defaultdict(lambda: 0)
+
+def rate_limit(f):
+    def inner(request):
+        global ip_last_request_map
+        if time() > ip_last_request_map[request.client_addr] + 2:
+            return {'error': 'requested too soon; 2 seconds required between calls.'}
+        ip_last_request_map[request.client_addr] = time.time()
+        return f(request)
+    return inner
+
 
 @view_config(route_name='api', renderer='json')
+@rate_limit
 def api_view(request):
-    global rpc
     assert hasattr(request, 'json_body')
     assert 'method' in request.json_body and 'params' in request.json_body
     method = request.json_body['method']

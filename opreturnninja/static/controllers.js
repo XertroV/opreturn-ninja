@@ -12,6 +12,7 @@
 
         pusher.push = function(){
             pusher.showMsg = false;
+            pusher.loading = true;
             $http.post('/api', {jsonrpc:"1.0", id:"", method:"sendrawtransaction", params:[pusher.tx]}).
             success(function(data){
                 pusher.msg = data;
