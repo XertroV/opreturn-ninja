@@ -63,7 +63,7 @@
                   <hr>
                   <p>
                       <ul>
-                            <li>Send a request to opreturn.ninja/api as you would to a bitcoind daemon.</li>
+                            <li>Send a request to opreturn.ninja/api as you would to a bitcoind daemon. <a href="https://bitcoin.org/en/developer-reference#remote-procedure-calls-rpcs">Documentation on RPC calls.</a></li>
                             <li>The only command supported currently is <code>sendrawtransaction</code>.</li>
                             <li>Example:
                                 <pre>{"jsonrpc": "1.0", "id":"some-id", "method": "sendrawtransaction", "params":
