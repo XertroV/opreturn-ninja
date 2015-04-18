@@ -13,10 +13,8 @@ requires = [
     'pyramid_chameleon',
     'pyramid_debugtoolbar',
     'pyramid_tm',
-    'SQLAlchemy',
-    'transaction',
-    'zope.sqlalchemy',
     'waitress',
+    'python-bitcoinlib',
     ]
 
 setup(name='op-return-ninja',
@@ -41,7 +39,5 @@ setup(name='op-return-ninja',
       entry_points="""\
       [paste.app_factory]
       main = opreturnninja:main
-      [console_scripts]
-      initialize_op-return-ninja_db = opreturnninja.scripts.initializedb:main
       """,
       )

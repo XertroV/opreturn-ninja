@@ -1,0 +1,16 @@
+ELECTRUM_SERVERS = {
+    'ecdsa.org': 50001,
+    'ecdsa.net': 50001,
+    'electrum.hachre.de': 50001,
+    'electrum.novit.ro': 50001,
+    'electrum.coinwallet.me': 50001,
+    'cube.l0g.in': 50001,
+    'bitcoin.epicinet.net': 50001,
+    'h.1209k.com': 50001,
+    'electrum.electricnewyear.net': 50001,
+    'erbium.sytes.net': 50001,
+    'e2.pdmc.net': 50001,
+    'electrum.no-ip.org': 50001,
+    'electrum.thwg.org': 50001,
+    'electrum.stepkrav.pw': 50001,
+}

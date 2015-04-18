@@ -3,7 +3,8 @@ body {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 300;
   color: #ffffff;
-  background: #bc2131;
+  #background: #bc2131;
+  background: #4A96AD;
 }
 h1,
 h2,
@@ -27,7 +28,7 @@ p {
   font-weight: 700;
 }
 .starter-template {
-  margin-top: 250px;
+  margin-top: 120px;
 }
 .starter-template .content {
   margin-left: 10px;
