@@ -25,11 +25,25 @@
 
   <body ng-controller="TxPushController as pusher">
 
-    <div class="starter-template">
+  <a href="https://github.com/XertroV/opreturn-ninja"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+
+
+    <div class="starter-template" ng-controller="TabController as tabs">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-offset-3 col-md-6 text-center">
+                    <ul class="list-inline">
+                        <li><button class="btn btn-lg btn-default" ng-click="tabs.set('main')">Main</button></li>
+                        <li><button class="btn btn-lg btn-default" ng-click="tabs.set('api')">API</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
       <div class="container">
         <div class="row">
           <div class="col-md-offset-2 col-md-8">
-            <div class="content">
+            <div class="content" ng-show="tabs.is('main')">
                 <h1 class="font-bold">opreturn.ninja</h1>
                 <hr>
                 <form>
@@ -44,6 +58,19 @@
                     <textarea disabled="true" class="form-control">{{pusher.msg}}</textarea>
                 </div>
             </div>
+              <div class="content" ng-show="tabs.is('api')">
+                  <h1 class="font-bold">API</h1>
+                  <hr>
+                  <p>
+                      <ul>
+                            <li>Send a request to opreturn.ninja/api as you would to a bitcoind daemon.</li>
+                            <li>The only command supported currently is <code>sendrawtransaction</code>.</li>
+                            <li>Example:
+                                <pre>{"jsonrpc": "1.0", "id":"some-id", "method": "sendrawtransaction", "params":
+["01000000013b2c966ddae21........0f300db4c7e36438b1e42a0d6f88ac00000000"]}</pre></li>
+                      </ul>
+                  </p>
+              </div>
           </div>
         </div>
       </div>

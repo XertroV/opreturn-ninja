@@ -26,4 +26,18 @@
             });
         };
     }]);
+
+    app.controller('TabController', ['$http', '$log', function($http, $log){
+        var tabs = this;
+
+        var current = 'main';
+
+        tabs.is = function(tabName){
+            return current == tabName;
+        };
+
+        tabs.set = function(tabName){
+            current = tabName;
+        };
+    }]);
 })();

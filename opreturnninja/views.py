@@ -19,7 +19,7 @@ def rate_limit(f):
         global ip_last_request_map
         if time() < ip_last_request_map[request.client_addr] + 2:
             return {'error': 'requested too soon; 2 seconds required between calls.'}
-        ip_last_request_map[request.client_addr] = time()
+        ip_last_request_map[request.client_addr] =  time()
         return f(request, *args, **kwargs)
     return inner
 
