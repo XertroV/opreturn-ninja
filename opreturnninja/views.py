@@ -1,25 +1,22 @@
 from collections import defaultdict
-
 import random
-
+import json
 from time import time
+import socket
 
 from pyramid.view import view_config
 
-from .constants import ELECTRUM_SERVERS
-
-from bitcoin.rpc import RawProxy, DEFAULT_USER_AGENT
-
-import socket
+from .constants import ELECTRUM_SERVERS, SECONDS_PER_REQUEST
 
 ip_last_request_map = defaultdict(lambda: 0)
+
 
 def rate_limit(f):
     def inner(request, *args, **kwargs):
         global ip_last_request_map
-        if time() < ip_last_request_map[request.client_addr] + 2:
-            return {'error': 'requested too soon; 2 seconds required between calls.'}
-        ip_last_request_map[request.client_addr] =  time()
+        if time() < ip_last_request_map[request.client_addr] + SECONDS_PER_REQUEST:
+            return {'error': 'requested too soon; {} seconds required between calls.'.format(SECONDS_PER_REQUEST)}
+        ip_last_request_map[request.client_addr] = time()
         return f(request, *args, **kwargs)
     return inner
 
@@ -39,22 +36,23 @@ def api_view(request):
             try:
                 server = random.choice(list(ELECTRUM_SERVERS.items()))
                 s = socket.create_connection(server)
-                s.send(b'{"id":"0", "method":"blockchain.transaction.broadcast", "params":["' + params[0].encode() + b'"]}\n')
-                r = {'result': s.recv(1024)[:-1].decode(), 'error': None, 'id': request.json_body['id']}  # the slice is to remove the trailing new line
-                print(r, server)
-                return r
+                s.send(json.dumps({"id": "opreturn.ninja-{}".format(time()), "method": "blockchain.transaction.broadcast", "params": [params[0]]}).encode() + b'\n')
+                electrum_response = json.loads(s.recv(2048)[:-1].decode())  # the slice is to remove the trailing new line
+                electrum_response['id'] = request.json_body['id']
+                print(electrum_response, server)
+                return electrum_response
             except ConnectionRefusedError as e:
                 print(e, server)
             except socket.gaierror as e:
                 print(e, server)
             except Exception as e:
                 print(e, server)
+                return {'error': str(e)}
     return {
         'result': None,
         'error': 'RPC Request Unknown',
         'id': request.json_body['id'],
     }
-
 
 
 @view_config(route_name='index', renderer='templates/index.pt')

@@ -14,3 +14,4 @@ ELECTRUM_SERVERS = {
     'electrum.thwg.org': 50001,  # good
     #'electrum.stepkrav.pw': 50001,
 }
+SECONDS_PER_REQUEST = 2
