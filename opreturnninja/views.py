@@ -2,6 +2,7 @@ from collections import defaultdict
 import random
 import json
 from time import time
+from datetime import datetime
 import socket
 
 from pyramid.view import view_config
@@ -29,6 +30,7 @@ def api_view(request):
     method = request.json_body['method']
     params = request.json_body['params']
     assert type(params) == list
+    time_now = datetime.now().isoformat()
     if method == 'sendrawtransaction':
         assert len(params) == 1
         sent = False
@@ -39,14 +41,14 @@ def api_view(request):
                 s.send(json.dumps({"id": "opreturn.ninja-{}".format(time()), "method": "blockchain.transaction.broadcast", "params": [params[0]]}).encode() + b'\n')
                 electrum_response = json.loads(s.recv(2048)[:-1].decode())  # the slice is to remove the trailing new line
                 electrum_response['id'] = request.json_body['id']
-                print(electrum_response, server)
+                print(electrum_response, server, time_now)
                 return electrum_response
             except ConnectionRefusedError as e:
-                print(e, server)
+                print(e, server, time_now)
             except socket.gaierror as e:
-                print(e, server)
+                print(e, server, time_now)
             except Exception as e:
-                print(e, server)
+                print(e, server, time_now)
                 return {'error': str(e)}
     return {
         'result': None,
