@@ -31,10 +31,12 @@ def api_view(request):
     params = request.json_body['params']
     assert type(params) == list
     time_now = datetime.now().isoformat()
+
     if method == 'sendrawtransaction':
         assert len(params) == 1
         sent = False
-        while not sent:
+        attempts = 0
+        while not sent and attempts < 5:
             try:
                 server = random.choice(list(ELECTRUM_SERVERS.items()))
                 s = socket.create_connection(server)
@@ -43,13 +45,12 @@ def api_view(request):
                 electrum_response['id'] = request.json_body['id']
                 print(electrum_response, server, time_now)
                 return electrum_response
-            except ConnectionRefusedError as e:
-                print(e, server, time_now)
-            except socket.gaierror as e:
+            except (ConnectionRefusedError, socket.gaierror) as e:
                 print(e, server, time_now)
             except Exception as e:
                 print(e, server, time_now)
                 return {'error': str(e)}
+            attempts += 1
     return {
         'result': None,
         'error': 'RPC Request Unknown',
@@ -57,6 +58,17 @@ def api_view(request):
     }
 
 
+@view_config(route_name='api_block', renderer='json')
+def api_block_view(request):
+    height = int(request.matchdict['height'])
+
+
+
 @view_config(route_name='index', renderer='templates/index.pt')
 def index_view(request):
     return {}
+
+
+
+
+

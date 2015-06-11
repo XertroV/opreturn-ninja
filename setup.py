@@ -14,7 +14,8 @@ requires = [
     'pyramid_debugtoolbar',
     'pyramid_tm',
     'waitress',
-    'python-bitcoinlib',
+    #'python-bitcoinlib',
+    'python-bitcoinrpc'
     ]
 
 setup(name='op-return-ninja',
@@ -39,5 +40,7 @@ setup(name='op-return-ninja',
       entry_points="""\
       [paste.app_factory]
       main = opreturnninja:main
+      [console_scripts]
+      initialize_op-return-ninja_db = opreturnninja.scripts.initializedb:main
       """,
       )
