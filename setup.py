@@ -15,7 +15,7 @@ requires = [
     'pyramid_tm',
     'waitress',
     #'python-bitcoinlib',
-    'python-bitcoinrpc'
+    'bitcoin-python'
     ]
 
 setup(name='op-return-ninja',

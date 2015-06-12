@@ -59,7 +59,7 @@
                 </div>
             </div>
               <div class="content" ng-show="tabs.is('api')">
-                  <h1 class="font-bold">API</h1>
+                  <h2 class="font-bold">API - Send Raw Transaction</h2>
                   <hr>
                   <p>
                       <ul>
@@ -74,6 +74,19 @@
                                 <pre>{'id': '', 'result': "{u'message': u'transaction already in block chain', u'code': -27}"}</pre>
                                 <pre>{'id': '', 'result': "{u'message': u'TX decode failed', u'code': -22}"}</pre>
                             </li>
+                      </ul>
+                  </p>
+                  <h2>API - Get nulldatas from blocks</h2>
+                  <hr>
+                  <p>
+                      <ul>
+                          <li>This API is meant to somewhat mirror the CoinSecrets API (documentation on api.coinsecrets.org).</li>
+                          <li>Use regular HTTP requests to get information on blocks: <code>http://opreturn.ninja/block/353197</code></li>
+                          <li>Respones are in JSON format with three primary fields: <code>height:int</code>, <code>timestamp:int</code>, and <code>op_returns:list</code>.</li>
+                          <li><code>op_returns</code> is a list of objects. These objects have four fields, <code>txid:str</code> and <code>script:str</code> provide hex encoded strings of the txid and script for the particular nulldata. <code>tx_n:int</code> and <code>tx_out_n:int</code> are included for ordering purposes.</li>
+                          <li>Example:
+                              <pre>{"op_returns": [{"tx_n": 0, "tx_out_n": 1, "txid": "93930a4bd46f8de411ae91fe0afd82a841301d678146d5b6449af738852b05be", "script": "6a200000000000000000000000000000000000000000000000000000ffff00000000"}, {"tx_n": 0, "tx_out_n": 2, "txid": "93930a4bd46f8de411ae91fe0afd82a841301d678146d5b6449af738852b05be", "script": "6a1976a914fdb9fb622b0db8d9121475a983288a0876f4de4888ac"}], "height": 464723, "timestamp": 1434079744}</pre>
+                          </li>
                       </ul>
                   </p>
               </div>

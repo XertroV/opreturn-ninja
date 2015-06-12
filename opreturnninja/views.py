@@ -5,12 +5,16 @@ from time import time
 from datetime import datetime
 import socket
 
+import bitcoinrpc
+
 from pyramid.view import view_config
 
 from .constants import ELECTRUM_SERVERS, SECONDS_PER_REQUEST
+from .models import DBSession as session, Nulldatas
 
 ip_last_request_map = defaultdict(lambda: 0)
 
+bitcoind = bitcoinrpc.connect_to_local(filename="C:\\Users\\mkay3730\\AppData\\Roaming\\Bitcoin\\bitcoin.conf").proxy
 
 def rate_limit(f):
     def inner(request, *args, **kwargs):
@@ -61,7 +65,15 @@ def api_view(request):
 @view_config(route_name='api_block', renderer='json')
 def api_block_view(request):
     height = int(request.matchdict['height'])
-
+    block_hash = bitcoind.getblockhash(height)
+    block_details = bitcoind.getblock(block_hash)
+    print(block_hash, block_details)
+    nulldatas = session.query(Nulldatas).filter(Nulldatas.in_block_hash == block_hash).all()
+    return {
+        'height': height,
+        'timestamp': block_details['time'],
+        'op_returns': [{'txid':n.txid, 'tx_n':n.tx_n, 'tx_out_n':n.tx_out_n, 'script':n.script} for n in nulldatas],
+    }
 
 
 @view_config(route_name='index', renderer='templates/index.pt')
