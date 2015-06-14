@@ -1,0 +1,11 @@
+[Unit]
+Description=opreturn.ninja site
+
+[Service]
+ExecStart=/usr/bin/pserve /home/user/prod/opreturn-ninja/production.ini
+Restart=on-abort
+User=user
+WorkingDirectory=/home/user/prod/opreturn-ninja
+
+[Install]
+WantedBy=multi-user.target
