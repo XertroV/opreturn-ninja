@@ -6,6 +6,7 @@ op-return-ninja README
 Running the Web Interface
 ---------------
 
+```
 - cd <directory containing this file>
 
 - $VENV/bin/python setup.py develop
@@ -15,6 +16,7 @@ Running the Web Interface
 # - $VENV/bin/initialize_op-return-ninja_db development.ini
 
 - $VENV/bin/pserve development.ini
+```
 
 
 Configuring Bitcoin Core
