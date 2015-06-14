@@ -5,6 +5,8 @@ from time import sleep
 
 import bitcoinrpc
 
+from sqlite3 import IntegrityError
+
 from pycoin.block import Block
 from pycoin.tx.TxOut import script_obj_from_script
 from pycoin.tx.pay_to.ScriptNulldata import ScriptNulldata
@@ -43,7 +45,6 @@ if __name__ == "__main__":
                         if type(script_object) == ScriptNulldata:
                             session.merge(Nulldatas(in_block_hash=block_hash, txid=hexlify(tx.hash()[::-1]), script=hexlify(tx_out.script), tx_n=tx_n, tx_out_n=tx_out_n))
                             print(script_object, tx.hash(), block_height)
-                            session.commit()
             session.commit()
 
             print('Scanned', block_height)
@@ -51,6 +52,9 @@ if __name__ == "__main__":
         except KeyboardInterrupt:
             print("Exiting.")
             break
+        except IntegrityError as e:
+            block_height += 1  # probably a duplicate entry
+            print(e)
         except Exception as e:
             print(e)
             session.rollback()
