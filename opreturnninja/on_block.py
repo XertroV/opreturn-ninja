@@ -23,16 +23,17 @@ if __name__ == "__main__":
     args = parser.parse_args()
     block_hash = args.block_hash
 
-    bitcoind = bitcoinrpc.connect_to_local(filename="C:\\Users\\mkay3730\\AppData\\Roaming\\Bitcoin\\bitcoin.conf").proxy
+    bitcoind = bitcoinrpc.connect_to_local().proxy
     seralized_block = BytesIO(unhexlify(bitcoind.getblock(args.block_hash, False)))
     block = Block.parse(seralized_block)
 
     for tx_n, tx in enumerate(block.txs):
         for tx_out_n, tx_out in enumerate(tx.txs_out):
-            script_object = script_obj_from_script(tx_out.script)
-            if type(script_object) == ScriptNulldata:
-                session.merge(Nulldatas(in_block_hash=block_hash, txid=hexlify(tx.hash()[::-1]), script=hexlify(tx_out.script), tx_n=tx_n, tx_out_n=tx_out_n))
-                print(script_object, tx.hash())
-            session.commit()
+            if tx_out.script[0:1] == b'\x6a':
+                script_object = script_obj_from_script(tx_out.script)
+                if type(script_object) == ScriptNulldata:
+                    session.merge(Nulldatas(in_block_hash=block_hash, txid=hexlify(tx.hash()[::-1]), script=hexlify(tx_out.script), tx_n=tx_n, tx_out_n=tx_out_n))
+                    print(script_object, tx.hash())
+                    session.commit()
         print(tx)
     session.commit()

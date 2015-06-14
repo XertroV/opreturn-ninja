@@ -14,7 +14,7 @@ from .models import DBSession as session, Nulldatas
 
 ip_last_request_map = defaultdict(lambda: 0)
 
-bitcoind = bitcoinrpc.connect_to_local(filename="C:\\Users\\mkay3730\\AppData\\Roaming\\Bitcoin\\bitcoin.conf").proxy
+bitcoind = bitcoinrpc.connect_to_local().proxy
 
 def rate_limit(f):
     def inner(request, *args, **kwargs):
