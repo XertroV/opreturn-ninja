@@ -48,6 +48,10 @@ if __name__ == "__main__":
 
             print('Scanned', block_height)
             block_height += 1
-        except:
+        except KeyboardInterrupt:
+            print("Exiting.")
+            break
+        except Exception as e:
+            print(e)
             session.rollback()
             sleep(1)
