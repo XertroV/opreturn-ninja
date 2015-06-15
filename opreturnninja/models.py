@@ -2,16 +2,9 @@ from binascii import hexlify as _hexlify
 
 from pycoin.tx.pay_to import script_obj_from_script, ScriptNulldata
 
-from sqlalchemy import Column, Index, Integer, Text,  String, Boolean, create_engine, Index
-
+from sqlalchemy import Column, Integer,  String, create_engine, Index
 from sqlalchemy.ext.declarative import declarative_base
-
-from sqlalchemy.orm import (
-    scoped_session,
-    sessionmaker,
-    )
-
-from zope.sqlalchemy import ZopeTransactionExtension
+from sqlalchemy.orm import scoped_session, sessionmaker
 
 
 def hexlify(raw_bytes):

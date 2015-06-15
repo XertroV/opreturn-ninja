@@ -1,13 +1,13 @@
 import argparse
 from io import BytesIO
-from binascii import unhexlify, hexlify as _hexlify
+from binascii import unhexlify
 from time import sleep
 
 from sqlalchemy.exc import IntegrityError
 
 from pycoin.block import Block
 
-from .models import DBSession, Nulldatas, merge_nulldatas_from_block_obj
+from .models import DBSession, merge_nulldatas_from_block_obj
 from .compatibility import bitcoind
 
 if __name__ == "__main__":
