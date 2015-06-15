@@ -11,10 +11,9 @@ from pyramid.view import view_config
 
 from .constants import ELECTRUM_SERVERS, SECONDS_PER_REQUEST
 from .models import DBSession as session, Nulldatas
+from .compatibility import bitcoind
 
 ip_last_request_map = defaultdict(lambda: 0)
-
-bitcoind = bitcoinrpc.connect_to_local().proxy
 
 def rate_limit(f):
     def inner(request, *args, **kwargs):
