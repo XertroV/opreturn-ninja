@@ -27,10 +27,11 @@
         };
     }]);
 
-    app.controller('TabController', ['$http', '$log', function($http, $log){
+    app.controller('TabController', ['$http', '$log', '$location', function($http, $log, $location){
         var tabs = this;
 
         var current = 'main';
+        $location.hash(current);
 
         tabs.is = function(tabName){
             return current == tabName;
@@ -38,6 +39,11 @@
 
         tabs.set = function(tabName){
             current = tabName;
+            $location.hash(tabName);
         };
     }]);
+
+    app.config(function($locationProvider) {
+        $locationProvider.html5Mode({enabled: true}).hashPrefix('!');
+    });
 })();
