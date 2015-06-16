@@ -1,7 +1,10 @@
 op-return-ninja README
 ==================
 
+## Requirements
 
+* Python 3 (3.4 assumed)
+* Bitcoin Core (for nulldata history)
 
 Running the Web Interface
 ---------------
