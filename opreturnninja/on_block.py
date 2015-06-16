@@ -1,8 +1,6 @@
 import argparse
 from io import BytesIO
-from binascii import unhexlify, hexlify as _hexlify
-
-import bitcoinrpc
+from binascii import unhexlify
 
 from pycoin.block import Block
 

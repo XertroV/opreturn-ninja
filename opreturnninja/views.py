@@ -5,8 +5,6 @@ from time import time
 from datetime import datetime
 import socket
 
-import bitcoinrpc
-
 from pyramid.view import view_config
 
 from .constants import ELECTRUM_SERVERS, SECONDS_PER_REQUEST
