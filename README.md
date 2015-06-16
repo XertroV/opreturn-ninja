@@ -1,4 +1,4 @@
-op-return-ninja README
+opreturn-ninja README
 ==================
 
 ## Requirements
@@ -38,3 +38,17 @@ server=1
 disablewallet=1
 blocknotify="cd /home/user/prod/opreturn-ninja/ && python -m opreturnninja.on_block --block-hash %s"
 ```
+
+
+## Scanning the blockchain via RPC
+
+```
+cd /home/user/prod/opreturn-ninja
+python -m opreturnninja.rpc_scan --block-height 1
+```
+
+This takes a long while and requires the block to be on the disk.
+If you are pruning it must be run as the chain is syncing to ensure you get all the nulldatas.
+
+The script does not terminate and will show a json rpc error when a block is not available.
+It then sleeps 1 second and trys again ad infinitum.
