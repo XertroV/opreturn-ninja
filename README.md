@@ -50,5 +50,5 @@ python -m opreturnninja.rpc_scan --block-height 1
 This takes a long while and requires the block to be on the disk.
 If you are pruning it must be run as the chain is syncing to ensure you get all the nulldatas.
 
-The script does not terminate and will show a json rpc error when a block is not available.
-It then sleeps 1 second and trys again ad infinitum.
+The script does not terminate and will show `<class 'bitcoinrpc.proxy.JSONRPCException'>` when a block is not available.
+It then sleeps 1 second and tries again ad infinitum.
