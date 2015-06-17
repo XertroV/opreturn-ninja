@@ -6,6 +6,7 @@ from sqlalchemy import Column, Integer,  String, create_engine, Index
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 
+from .compatibility import bitcoind
 
 def hexlify(raw_bytes):
     if type(raw_bytes) is bytes:
@@ -26,6 +27,8 @@ class Nulldatas(Base):
     script = Column(String)
     tx_n = Column(Integer)
     tx_out_n = Column(Integer)
+    timestamp = Column(Integer)
+    sender = Column(String)
 
 
 def merge_nulldatas_from_block_obj(block, block_hash=None, block_height=None, verbose=False):
@@ -39,7 +42,10 @@ def merge_nulldatas_from_block_obj(block, block_hash=None, block_height=None, ve
             if tx_out.script[0:1] == b'\x6a':
                 script_object = script_obj_from_script(tx_out.script)
                 if type(script_object) == ScriptNulldata:
-                    session.merge(Nulldatas(in_block_hash=block_hash, txid=hexlify(tx.hash()[::-1]), script=hexlify(tx_out.script), tx_n=tx_n, tx_out_n=tx_out_n))
+                    id_tx_reference = tx.txs_in[0]  # tx containing the identity
+                    id_tx_json = bitcoind.getrawtransaction(id_tx_reference.previous_hash, True)
+                    sender_address = id_tx_json['vout'][id_tx_reference.previous_index]['scriptPubKey']['addresses'][0]
+                    session.merge(Nulldatas(in_block_hash=block_hash, txid=hexlify(tx.hash()[::-1]), script=hexlify(tx_out.script), tx_n=tx_n, tx_out_n=tx_out_n, timestamp=block.timestamp, sender=sender_address))
                     if verbose:
                         print(script_object, tx.hash(), block_height)
     session.commit()

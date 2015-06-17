@@ -61,15 +61,29 @@ def api_view(request):
 
 @view_config(route_name='api_block', renderer='json')
 def api_block_view(request):
-    height = int(request.matchdict['height'])
-    block_hash = bitcoind.getblockhash(height)
-    block_details = bitcoind.getblock(block_hash)
-    print(block_hash, block_details)
+    def error(reason):
+        return {'error':reason}
+
+    try:
+        height = int(request.matchdict['height'])
+    except:
+        return error('height parameter required')
+
+    try:
+        block_hash = bitcoind.getblockhash(height)
+    except:
+        return error('unable to find hash for provided height')
+
+    try:
+        block_details = bitcoind.getblock(block_hash)
+    except:
+        return error('unable to retrieve block details')
+
     nulldatas = session.query(Nulldatas).filter(Nulldatas.in_block_hash == block_hash).all()
     return {
         'height': height,
         'timestamp': block_details['time'],
-        'op_returns': [{'txid':n.txid, 'tx_n':n.tx_n, 'tx_out_n':n.tx_out_n, 'script':n.script} for n in nulldatas],
+        'op_returns': [{'txid': n.txid, 'tx_n': n.tx_n, 'tx_out_n': n.tx_out_n, 'script': n.script, 'sender': n.sender, 'timestamp': n.timestamp} for n in nulldatas],
     }
 
 
