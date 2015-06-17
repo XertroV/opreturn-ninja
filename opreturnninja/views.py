@@ -37,6 +37,12 @@ def api_view(request):
         assert len(params) == 1
         sent = False
         attempts = 0
+
+        try:  # if we can broadcast locally just do that
+            return bitcoind.sendrawtransaction(params)
+        except:
+            pass
+
         while not sent and attempts < 5:
             try:
                 server = random.choice(list(ELECTRUM_SERVERS.items()))
