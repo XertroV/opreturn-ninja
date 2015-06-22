@@ -43,7 +43,7 @@ def merge_nulldatas_from_block_obj(block, block_hash=None, block_height=None, ve
                 script_object = script_obj_from_script(tx_out.script)
                 if type(script_object) == ScriptNulldata:
                     id_tx_reference = tx.txs_in[0]  # tx containing the identity
-                    id_tx_json = bitcoind.getrawtransaction(id_tx_reference.previous_hash, 1)
+                    id_tx_json = bitcoind.getrawtransaction(hexlify(id_tx_reference.previous_hash[::-1]), 1)
                     sender_address = id_tx_json['vout'][id_tx_reference.previous_index]['scriptPubKey']['addresses'][0]
                     session.merge(Nulldatas(in_block_hash=block_hash, txid=hexlify(tx.hash()[::-1]), script=hexlify(tx_out.script), tx_n=tx_n, tx_out_n=tx_out_n, timestamp=block.timestamp, sender=sender_address))
                     if verbose:
