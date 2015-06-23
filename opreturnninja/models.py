@@ -43,7 +43,7 @@ def merge_nulldatas_from_block_obj(block, block_hash=None, block_height=None, ve
                 script_object = script_obj_from_script(tx_out.script)
                 if type(script_object) == ScriptNulldata:
                     id_tx_reference = tx.txs_in[0]  # tx containing the identity
-                    if id_tx_reference.previous_hash == '\x00' * 32:  # coinbase tx
+                    if id_tx_reference.is_coinbase():
                         sender_address = 'COINBASE'
                     else:
                         id_tx_json = bitcoind.getrawtransaction(hexlify(id_tx_reference.previous_hash[::-1]), 1)
