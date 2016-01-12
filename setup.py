@@ -15,7 +15,9 @@ requires = [
     'pyramid_tm',
     'waitress',
     #'python-bitcoinlib',
-    'bitcoin-python'
+    'bitcoin-python',
+    'pycoin',
+    'sqlalchemy'
     ]
 
 setup(name='op-return-ninja',
