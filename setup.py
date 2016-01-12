@@ -14,8 +14,7 @@ requires = [
     'pyramid_debugtoolbar',
     'pyramid_tm',
     'waitress',
-    #'python-bitcoinlib',
-    'bitcoin-python',
+    'python-bitcoinrpc',
     'pycoin',
     'sqlalchemy'
     ]
