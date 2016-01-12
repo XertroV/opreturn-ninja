@@ -3,13 +3,14 @@ from io import BytesIO
 from binascii import unhexlify
 from time import sleep
 import logging
+from socket import timeout
 
 from sqlalchemy.exc import IntegrityError
 
 from pycoin.block import Block
 
 from .models import DBSession, merge_nulldatas_from_block_obj
-from .compatibility import bitcoind
+from .compatibility import bitcoind, gen_bitcoind
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
@@ -39,6 +40,9 @@ if __name__ == "__main__":
             session.rollback()
             block_height += 1  # probably a duplicate entry
             print(e, 'skipping')
+        except timeout as e:
+            logging.debug('Timeout... Creating new bitcoind')
+            bitcoind = gen_bitcoind()
         except Exception as e:
             session.rollback()
             print(e, type(e))
