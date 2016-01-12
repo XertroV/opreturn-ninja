@@ -2,6 +2,7 @@ import argparse
 from io import BytesIO
 from binascii import unhexlify
 from time import sleep
+import logging
 
 from sqlalchemy.exc import IntegrityError
 
@@ -11,6 +12,7 @@ from .models import DBSession, merge_nulldatas_from_block_obj
 from .compatibility import bitcoind
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG)
     session = DBSession
 
     parser = argparse.ArgumentParser()
