@@ -13,7 +13,7 @@ from .models import DBSession, merge_nulldatas_from_block_obj
 from .compatibility import bitcoind, gen_bitcoind
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
+    # logging.basicConfig(level=logging.DEBUG)
     session = DBSession
 
     parser = argparse.ArgumentParser()
