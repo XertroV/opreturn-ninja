@@ -9,6 +9,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from .compatibility import bitcoind
 from .config import config
 
+
 def hexlify(raw_bytes):
     if type(raw_bytes) is bytes:
         return _hexlify(raw_bytes).decode()
@@ -20,6 +21,13 @@ DBSession = scoped_session(sessionmaker(bind=engine))
 Base = declarative_base()
 
 
+def provide_session(f):
+    def inner(*args, **kwargs):
+        session = scoped_session(sessionmaker(bind=create_engine(config.DATABASE_URL)))
+        f(*args, **kwargs, session=session)
+    return inner
+
+
 class Blocks(Base):
     __tablename__ = 'blocks'
     id = Column(Integer, primary_key=True)
@@ -28,8 +36,9 @@ class Blocks(Base):
     prev_block_hash = Column(String)
 
 
-def have_block(block_height):
-    if len(DBSession.query(Blocks).filter(Blocks.height == block_height).all()) == 0:
+@provide_session
+def have_block(block_height, session=None):
+    if len(session.query(Blocks).filter(Blocks.height == block_height).all()) == 0:
         return False
     return True
 
@@ -46,8 +55,8 @@ class Nulldatas(Base):
     sender = Column(String)
 
 
-def merge_nulldatas_from_block_obj(block, block_hash, block_height, verbose=False):
-    session = scoped_session(sessionmaker(bind=create_engine(config.DATABASE_URL)))
+@provide_session
+def merge_nulldatas_from_block_obj(block, block_hash, block_height, verbose=False, session=None):
     try:
         for tx_n, tx in enumerate(block.txs):
             for tx_out_n, tx_out in enumerate(tx.txs_out):
@@ -75,3 +84,4 @@ def merge_nulldatas_from_block_obj(block, block_hash, block_height, verbose=Fals
 Index('index_nulldatas', Nulldatas.in_block_hash, Nulldatas.txid, Nulldatas.tx_n, Nulldatas.tx_out_n, unique=True)
 
 Base.metadata.create_all(engine)
+print('created tables')

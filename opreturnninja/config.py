@@ -28,8 +28,7 @@ set_config('DEBUG', 'True', str)
 config['debug'] = config['DEBUG'].lower() == 'true'
 
 
-set_config('DATABASE_URL', 'sqlite:///:memory:', str)
-
+set_config('DATABASE_URL', 'sqlite:///test.sqlite', str)
 
 set_config('BITCOIN_RPC_USER', 'rpcuser', str)
 set_config('BITCOIN_RPC_PASSWORD', 'rpcpassword', str)
