@@ -64,7 +64,7 @@ if __name__ == "__main__":
     have_blocks_up_to = min(force_from, max_block_height())
 
     args = [i for i in range(have_blocks_up_to + 1, force_from + (144*365))]
-    pool = multiprocessing.Pool(10)
+    pool = multiprocessing.Pool(50)
     results = pool.imap(block_at_height, args)
     print("Got results object %s" % results)
 
