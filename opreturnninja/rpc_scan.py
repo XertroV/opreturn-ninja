@@ -67,7 +67,7 @@ if __name__ == "__main__":
                 _bitcoind = gen_bitcoind()
                 sleep(0.1)
 
-    bitcoind = gen_bitcoind()
+    bitcoind = gen_bitcoind(timeout=3)
     best_block = bitcoind.getbestblockhash()
     force_from = bitcoind.getblock(best_block)['height'] - 144  # force rescan of last day at least
     # TODO: figure out how to ensure we always have the correct nulldatas available in case of reorg
@@ -86,6 +86,6 @@ if __name__ == "__main__":
     print("Got results object %s" % results)
 
     for r in results:
-        print("Got results %s, %s" % (r[1], r[2]))
+        print("Finished processing %s, %s" % (r[1], r[2]))
         pace_q.put(True)
     pool.join()
