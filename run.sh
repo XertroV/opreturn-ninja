@@ -1,4 +1,4 @@
 #!/bin/bash
 set -e
 python setup.py develop
-python applicaiton.py
+python application.py
