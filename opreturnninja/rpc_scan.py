@@ -68,7 +68,7 @@ if __name__ == "__main__":
     print("Top block hash: %s" % best_block)
 
     args = [(block_at_height, (i, (i >= force_from))) for i in range(init_bh, force_from + (144*365))]
-    pool = multiprocessing.Pool(1)
+    pool = multiprocessing.Pool(50)
     results = pool.imap(fstar, args)
     print("Got results object %s" % results)
 
