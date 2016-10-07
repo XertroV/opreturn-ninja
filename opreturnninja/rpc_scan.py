@@ -58,6 +58,7 @@ if __name__ == "__main__":
                 ans = (block, block_hash, block_height)
                 print("Processing results for height %d" % ans[2])
                 merge_nulldatas_from_block_obj(*ans)
+                return ans
             except timeout as e:
                 logging.warning('Timeout... Creating new bitcoind')
             except Exception as e:
@@ -83,5 +84,5 @@ if __name__ == "__main__":
     results = pool.imap(block_at_height, args)
     print("Got results object %s" % results)
 
-
-
+    for r in results:
+        print("Got results %s" % r)
