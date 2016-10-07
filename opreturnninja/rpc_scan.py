@@ -65,6 +65,7 @@ if __name__ == "__main__":
                 logging.warning("%d, %s, %s" % (block_height, e, type(e)))
             finally:
                 _bitcoind = gen_bitcoind()
+                sleep(0.1)
 
     bitcoind = gen_bitcoind()
     best_block = bitcoind.getbestblockhash()
@@ -87,3 +88,4 @@ if __name__ == "__main__":
     for r in results:
         print("Got results %s, %s" % (r[1], r[2]))
         pace_q.put(True)
+    pool.join()
