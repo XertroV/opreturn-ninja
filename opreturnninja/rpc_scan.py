@@ -36,12 +36,12 @@ if __name__ == "__main__":
         except KeyboardInterrupt:
             print("Exiting.")
             break
-        except IntegrityError as e:
-            session.rollback()
-            block_height += 1  # probably a duplicate entry
-            print(e, 'skipping')
+        # except IntegrityError as e:  # Don't know if we need this except, so commenting out - 7/10/16 - Max
+        #     session.rollback()
+        #     block_height += 1  # probably a duplicate entry
+        #     print(e, 'skipping')
         except timeout as e:
-            logging.debug('Timeout... Creating new bitcoind')
+            logging.warn('Timeout... Creating new bitcoind')
             bitcoind = gen_bitcoind()
         except Exception as e:
             session.rollback()

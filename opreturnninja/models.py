@@ -7,6 +7,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 from .compatibility import bitcoind
+from .config import config
 
 def hexlify(raw_bytes):
     if type(raw_bytes) is bytes:
@@ -14,7 +15,7 @@ def hexlify(raw_bytes):
     return _hexlify(raw_bytes)
 
 
-engine = create_engine('sqlite:///opreturn.sqlite', connect_args={'timeout': 15})#, echo=True)
+engine = create_engine(config.DATABASE_URL)#, echo=True)
 DBSession = scoped_session(sessionmaker(bind=engine))
 Base = declarative_base()
 

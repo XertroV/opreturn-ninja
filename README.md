@@ -22,6 +22,27 @@ Running the Web Interface
 ```
 
 
+Configuring Heroku
+------------------
+
+You'll need some config variables:
+
+* `BITCOIN_HOST` - hostname or IP of bitcoin node
+* `BITCOIN_SSH_USER` - user to ssh into (for reverse port forwarding to enable secure RPC)
+* `HEROKU_PUBLIC_KEY` - public part of ssh key (wherein the public part should be in your bitcoin node's `~/.ssh/authorized_keys`)
+* `HEROKU_PRIVATE_KEY` - private part of above key
+
+* `BITCOIN_RPC_USER`
+* `BITCOIN_RPC_PASSWORD`
+
+* `DATABASE_URL` - should be set by heroku with their postgres instance
+
+### Notes
+
+See [here](http://stackoverflow.com/questions/21575582/ssh-tunneling-from-heroku) for sshing out of heroku docs
+
+
+
 Configuring Bitcoin Core
 ---------------
 
