@@ -2,7 +2,7 @@ from binascii import hexlify as _hexlify
 
 from pycoin.tx.pay_to import script_obj_from_script, ScriptNulldata
 
-from sqlalchemy import Column, Integer,  String, create_engine, Index
+from sqlalchemy import Column, Integer,  String, create_engine, Index, func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 
@@ -42,8 +42,10 @@ def have_block(block_height, session=DBSession):
     return True
 
 
-def all_block_heights():
-    return [e.height for e in DBSession.query(Blocks).all()]
+def max_block_height():
+    _height = DBSession.query(func.max(Blocks.height)).one()[0]
+    print(_height)
+    return _height
 
 
 class Nulldatas(Base):
