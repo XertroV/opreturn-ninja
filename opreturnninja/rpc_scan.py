@@ -15,6 +15,14 @@ from pycoin.block import Block
 from .models import DBSession, merge_nulldatas_from_block_obj, have_block
 from .compatibility import gen_bitcoind
 
+
+def f(func, args):
+    return func(*args)
+
+def fstar(args):
+    return f(*args)
+
+
 if __name__ == "__main__":
     # logging.basicConfig(level=logging.DEBUG)
     session = DBSession
@@ -41,13 +49,14 @@ if __name__ == "__main__":
             try:
                 block_hash = _bitcoind.getblockhash(block_height)
                 block = Block.parse(block_as_bytesio(_bitcoind, block_hash))
-                merge_nulldatas_from_block_obj(block, block_hash, block_height, verbose=True)
-                break
+                print("Got block: %s" % block)
+                return (block, block_hash, block_height)
+                # merge_nulldatas_from_block_obj(block, block_hash, block_height, verbose=True)
             except timeout as e:
                 logging.warning('Timeout... Creating new bitcoind')
             except http.client.CannotSendRequest as e:
                 logging.warning("%d, %s, %s" % (block_height, e, type(e)))
-                sleep(60)
+                sleep(5)
             except Exception as e:
                 logging.warning("%d, %s, %s" % (block_height, e, type(e)))
                 sleep(5)
@@ -58,7 +67,14 @@ if __name__ == "__main__":
     # TODO: figure out how to ensure we always have the correct nulldatas available in case of reorg
     print("Top block hash: %s" % best_block)
 
-    args = [(i, (i >= force_from)) for i in range(init_bh, force_from + (144*365))]
-    pool = multiprocessing.Pool(15)
-    pool.starmap(block_at_height, args, chunksize=1)
+    args = [(block_at_height, (i, (i >= force_from))) for i in range(init_bh, force_from + (144*365))]
+    pool = multiprocessing.Pool(1)
+    results = pool.imap(fstar, args)
+    print("Got results object %s" % results)
+
+    for n in results:
+        if n is not None:
+            merge_nulldatas_from_block_obj(*n)
+
+
 

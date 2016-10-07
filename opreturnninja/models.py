@@ -36,8 +36,7 @@ class Blocks(Base):
     prev_block_hash = Column(String)
 
 
-@provide_session
-def have_block(block_height, session=None):
+def have_block(block_height, session=DBSession):
     if len(session.query(Blocks).filter(Blocks.height == block_height).all()) == 0:
         return False
     return True
@@ -55,8 +54,7 @@ class Nulldatas(Base):
     sender = Column(String)
 
 
-@provide_session
-def merge_nulldatas_from_block_obj(block, block_hash, block_height, verbose=False, session=None):
+def merge_nulldatas_from_block_obj(block, block_hash, block_height, verbose=False, session=DBSession):
     try:
         for tx_n, tx in enumerate(block.txs):
             for tx_out_n, tx_out in enumerate(tx.txs_out):
