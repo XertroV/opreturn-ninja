@@ -49,13 +49,11 @@ if __name__ == "__main__":
                 return (block, block_hash, block_height)
             except timeout as e:
                 logging.warning('Timeout... Creating new bitcoind')
-                _bitcoind = gen_bitcoind()
-            except http.client.CannotSendRequest as e:
-                logging.warning("%d, %s, %s" % (block_height, e, type(e)))
-                sleep(5)
             except Exception as e:
                 logging.warning("%d, %s, %s" % (block_height, e, type(e)))
                 sleep(5)
+            finally:
+                _bitcoind = gen_bitcoind()
 
     bitcoind = gen_bitcoind()
     best_block = bitcoind.getbestblockhash()
