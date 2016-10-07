@@ -5,7 +5,7 @@ from time import sleep
 import logging
 from socket import timeout
 import http.client
-import multiprocessing
+import multiprocessing as mp
 import functools
 
 from sqlalchemy.exc import IntegrityError
@@ -35,6 +35,11 @@ if __name__ == "__main__":
     n_proc = args.n_processes
     print("Got args: %s" % args)
 
+    pace_q_size = 50
+    pace_q = mp.Queue(pace_q_size)
+    for i in range(pace_q_size - 2):
+        mp.Queue.put(True)
+
     def get_block(bitcoind, block_hash, hex_summary=True):
         return bitcoind.getblock(block_hash, hex_summary)
 
@@ -43,6 +48,7 @@ if __name__ == "__main__":
 
     def block_at_height(block_height):
         _bitcoind = gen_bitcoind()
+        pace_q.get()
 
         while True:
             try:
@@ -70,11 +76,12 @@ if __name__ == "__main__":
     all_heights = all_block_heights()
 
     args = [i for i in range(start_scan_from + 1, force_from + (144 * 365))]
-    pool = multiprocessing.Pool(n_proc)
+    pool = mp.Pool(n_proc)
     results = pool.imap(block_at_height, args)
     print("Got results object %s" % results)
 
     for n in results:
+        pace_q.put(True)
         if n is not None:
             print("Got results for height %d" % n[2])
             merge_nulldatas_from_block_obj(*n)
