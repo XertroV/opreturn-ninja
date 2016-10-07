@@ -16,7 +16,7 @@ def hexlify(raw_bytes):
 
 
 engine = create_engine(config.DATABASE_URL)#, echo=True)
-session_factory = lambda: scoped_session(sessionmaker(bind=engine))
+session_factory = lambda: scoped_session(sessionmaker(bind=create_engine(config.DATABASE_URL)))
 DBSession = scoped_session(sessionmaker(bind=engine))
 Base = declarative_base()
 
