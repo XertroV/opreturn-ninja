@@ -29,6 +29,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--block-height', help='Start from this block height', type=int, required=True)
+    parser.add_argument('--n-processes', help='How many processes to use, can be higher than CPU#', type=int, default=1)
     args = parser.parse_args()
     init_bh = args.block_height
 
@@ -67,7 +68,7 @@ if __name__ == "__main__":
     all_heights = all_block_heights()
 
     args = [i for i in range(start_scan_from + 1, force_from + (144 * 365))]
-    pool = multiprocessing.Pool(50)
+    pool = multiprocessing.Pool(args.n_processes)
     results = pool.imap(block_at_height, args)
     print("Got results object %s" % results)
 
