@@ -32,6 +32,7 @@ if __name__ == "__main__":
     parser.add_argument('--n-processes', help='How many processes to use, can be higher than CPU#', type=int, default=1)
     args = parser.parse_args()
     init_bh = args.block_height
+    print("Got args: %s" % args)
 
     def get_block(bitcoind, block_hash, hex_summary=True):
         return bitcoind.getblock(block_hash, hex_summary)
