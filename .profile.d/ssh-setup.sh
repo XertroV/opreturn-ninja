@@ -18,6 +18,7 @@ echo "bitcoin.xk.io ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlz
 
 # Start the SSH tunnel if not already running
 SSH_CMD="autossh -f -i ${HOME}/.ssh/heroku_id_rsa -N -L 8332:127.0.0.1:8332 ${BITCOIN_SSH_USER}@${BITCOIN_HOST}"
+echo "SSH_CMD: ${SSH_CMD}"
 
 PID=`pgrep -f "${SSH_CMD}"`
 if [ $PID ] ; then
