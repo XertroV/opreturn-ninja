@@ -48,11 +48,10 @@ def get_block_by_hash(block_hash, session=DBSession):
 
 def max_block_height():
     _height = DBSession.query(func.max(Blocks.height)).one()[0]
-    print(_height)
     return _height
 
 def all_block_heights():
-    _heights = DBSession.query(Blocks.height).all()
+    _heights = list(map(lambda e: e[0], DBSession.query(Blocks.height).all()))
     try:
         print(type(_heights))
         print(_heights[0])
