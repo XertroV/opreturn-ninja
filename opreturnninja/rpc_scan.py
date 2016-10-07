@@ -38,7 +38,7 @@ if __name__ == "__main__":
     pace_q_size = 50
     pace_q = mp.Queue(pace_q_size)
     for i in range(pace_q_size - 2):
-        mp.Queue.put(True)
+        pace_q.put(True)
 
     def get_block(bitcoind, block_hash, hex_summary=True):
         return bitcoind.getblock(block_hash, hex_summary)
