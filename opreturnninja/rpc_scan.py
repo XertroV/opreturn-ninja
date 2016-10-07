@@ -41,7 +41,7 @@ if __name__ == "__main__":
         #     block_height += 1  # probably a duplicate entry
         #     print(e, 'skipping')
         except timeout as e:
-            logging.warn('Timeout... Creating new bitcoind')
+            logging.warning('Timeout... Creating new bitcoind')
             bitcoind = gen_bitcoind()
         except Exception as e:
             session.rollback()
