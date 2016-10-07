@@ -12,7 +12,7 @@ from sqlalchemy.exc import IntegrityError
 
 from pycoin.block import Block
 
-from .models import DBSession, merge_nulldatas_from_block_obj, have_block, max_block_height
+from .models import DBSession, merge_nulldatas_from_block_obj, have_block, max_block_height, all_block_heights
 from .compatibility import gen_bitcoind
 
 
@@ -61,9 +61,12 @@ if __name__ == "__main__":
     # TODO: figure out how to ensure we always have the correct nulldatas available in case of reorg
     print("Top block hash: %s" % best_block)
 
-    have_blocks_up_to = min(force_from, max_block_height())
+    start_scan_from = min(force_from, max_block_height(), init_bh)
+    print("Scanning from %s" % start_scan_from)
 
-    args = [i for i in range(have_blocks_up_to + 1, force_from + (144*365))]
+    all_heights = all_block_heights()
+
+    args = [i for i in range(start_scan_from + 1, force_from + (144 * 365))]
     pool = multiprocessing.Pool(50)
     results = pool.imap(block_at_height, args)
     print("Got results object %s" % results)

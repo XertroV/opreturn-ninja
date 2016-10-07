@@ -51,6 +51,15 @@ def max_block_height():
     print(_height)
     return _height
 
+def all_block_heights():
+    _heights = DBSession.query(Blocks.height).all()
+    try:
+        print(type(_heights))
+        print(_heights[0])
+    except:
+        pass
+    return _heights
+
 
 class Nulldatas(Base):
     __tablename__ = 'nulldatas'
