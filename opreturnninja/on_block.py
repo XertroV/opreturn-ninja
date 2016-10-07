@@ -14,5 +14,6 @@ if __name__ == "__main__":
     block_hash = args.block_hash
 
     seralized_block = BytesIO(unhexlify(bitcoind.getblock(args.block_hash, False)))
+    json_block = bitcoind.getblock(args.block_hash)
     block = Block.parse(seralized_block)
-    merge_nulldatas_from_block_obj(block, block_hash, verbose=True)
+    merge_nulldatas_from_block_obj(block, block_hash, json_block['height'], verbose=True)

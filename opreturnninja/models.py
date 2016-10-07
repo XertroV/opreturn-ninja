@@ -20,6 +20,20 @@ DBSession = scoped_session(sessionmaker(bind=engine))
 Base = declarative_base()
 
 
+class Blocks(Base):
+    __tablename__ = 'blocks'
+    id = Column(Integer, primary_key=True)
+    block_hash = Column(String, unique=True)
+    height = Column(String)
+    prev_block_hash = Column(String)
+
+
+def have_block(block_height):
+    if len(DBSession.query(Blocks).filter(Blocks.height == block_height).all()) == 0:
+        return False
+    return True
+
+
 class Nulldatas(Base):
     __tablename__ = 'nulldatas'
     id = Column(Integer, primary_key=True)
@@ -32,27 +46,29 @@ class Nulldatas(Base):
     sender = Column(String)
 
 
-def merge_nulldatas_from_block_obj(block, block_hash=None, block_height=None, verbose=False):
+def merge_nulldatas_from_block_obj(block, block_hash, block_height, verbose=False):
     session = DBSession
-    if block_hash is None:
-        block_hash = hexlify(block.hash()[::-1])
-    if block_height is None:
-        block_height = block_hash
-    for tx_n, tx in enumerate(block.txs):
-        for tx_out_n, tx_out in enumerate(tx.txs_out):
-            if tx_out.script[0:1] == b'\x6a':
-                script_object = script_obj_from_script(tx_out.script)
-                if type(script_object) == ScriptNulldata:
-                    id_tx_reference = tx.txs_in[0]  # tx containing the identity
-                    if id_tx_reference.is_coinbase():
-                        sender_address = 'COINBASE'
-                    else:
-                        id_tx_json = bitcoind.getrawtransaction(hexlify(id_tx_reference.previous_hash[::-1]), 1)
-                        sender_address = id_tx_json['vout'][id_tx_reference.previous_index]['scriptPubKey']['addresses'][0]
-                    session.merge(Nulldatas(in_block_hash=block_hash, txid=hexlify(tx.hash()[::-1]), script=hexlify(tx_out.script), tx_n=tx_n, tx_out_n=tx_out_n, timestamp=block.timestamp, sender=sender_address))
-                    if verbose:
-                        print(script_object, tx.hash(), block_height)
-    session.commit()
+    try:
+        for tx_n, tx in enumerate(block.txs):
+            for tx_out_n, tx_out in enumerate(tx.txs_out):
+                if tx_out.script[0:1] == b'\x6a':
+                    script_object = script_obj_from_script(tx_out.script)
+                    if type(script_object) == ScriptNulldata:
+                        id_tx_reference = tx.txs_in[0]  # tx containing the identity
+                        if id_tx_reference.is_coinbase():
+                            sender_address = 'COINBASE'
+                        else:
+                            id_tx_json = bitcoind.getrawtransaction(hexlify(id_tx_reference.previous_hash[::-1]), 1)
+                            sender_address = id_tx_json['vout'][id_tx_reference.previous_index]['scriptPubKey']['addresses'][0]
+                        session.merge(Nulldatas(in_block_hash=block_hash, txid=hexlify(tx.hash()[::-1]), script=hexlify(tx_out.script), tx_n=tx_n, tx_out_n=tx_out_n, timestamp=block.timestamp, sender=sender_address))
+                        if verbose:
+                            print(script_object, tx.hash(), block_height)
+        session.merge(Blocks(block_hash=block_hash, height=block_height, prev_block_hash=block.previous_block_id()))
+    except Exception as e:
+        session.rollback()
+        raise e
+    else:
+        session.commit()
     if verbose:
         print('Scanned', block_height)
 
