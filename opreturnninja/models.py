@@ -24,7 +24,7 @@ class Blocks(Base):
     __tablename__ = 'blocks'
     id = Column(Integer, primary_key=True)
     block_hash = Column(String, unique=True)
-    height = Column(String)
+    height = Column(Integer)
     prev_block_hash = Column(String)
 
 
