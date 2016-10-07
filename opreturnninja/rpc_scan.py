@@ -86,5 +86,5 @@ if __name__ == "__main__":
     print("Got results object %s" % results)
 
     for r in results:
-        print("Got results %s" % (r[1], r[2]))
+        print("Got results %s, %s" % (r[1], r[2]))
         pace_q.put(True)
