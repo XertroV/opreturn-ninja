@@ -67,12 +67,13 @@ if __name__ == "__main__":
     print(all_heights)
 
     args = [i for i in range(init_bh, force_from + (144*365)) if i not in all_heights]
-    pool = multiprocessing.Pool(50)
+    pool = multiprocessing.Pool(10)
     results = pool.imap(block_at_height, args)
     print("Got results object %s" % results)
 
     for n in results:
         if n is not None:
+            print("Got results for height %d" % n[2])
             merge_nulldatas_from_block_obj(*n)
 
 
