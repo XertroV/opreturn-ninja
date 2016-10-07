@@ -73,9 +73,9 @@ if __name__ == "__main__":
     start_scan_from = min(force_from, max_block_height(), init_bh)
     print("Scanning from %s" % start_scan_from)
 
-    all_heights = all_block_heights()
+    existing_heights = set(all_block_heights())
 
-    args = [i for i in range(start_scan_from + 1, force_from + (144 * 365))]
+    args = [i for i in range(start_scan_from + 1, force_from + (144 * 365)) if i not in existing_heights]
     pool = mp.Pool(n_proc)
     results = pool.imap(block_at_height, args)
     print("Got results object %s" % results)
@@ -83,7 +83,7 @@ if __name__ == "__main__":
     for n in results:
         pace_q.put(True)
         if n is not None:
-            print("Got results for height %d" % n[2])
+            print("Processing results for height %d" % n[2])
             merge_nulldatas_from_block_obj(*n)
 
 
