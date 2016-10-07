@@ -74,6 +74,8 @@ class Nulldatas(Base):
 
 def merge_nulldatas_from_block_obj(block, block_hash, block_height, verbose=False, session=DBSession):
     try:
+        if get_block_by_hash(block_hash) is not None:
+            return  # we have this block already
         for tx_n, tx in enumerate(block.txs):
             for tx_out_n, tx_out in enumerate(tx.txs_out):
                 if tx_out.script[0:1] == b'\x6a':
