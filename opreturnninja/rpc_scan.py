@@ -48,14 +48,16 @@ if __name__ == "__main__":
 
     def block_at_height(block_height):
         _bitcoind = gen_bitcoind()
-        pace_q.get()
+        # pace_q.get()
 
         while True:
             try:
                 block_hash = _bitcoind.getblockhash(block_height)
                 block = Block.parse(block_as_bytesio(_bitcoind, block_hash))
                 print("Got block: %s" % block)
-                return (block, block_hash, block_height)
+                ans = (block, block_hash, block_height)
+                print("Processing results for height %d" % ans[2])
+                merge_nulldatas_from_block_obj(*ans)
             except timeout as e:
                 logging.warning('Timeout... Creating new bitcoind')
             except Exception as e:
@@ -80,12 +82,6 @@ if __name__ == "__main__":
     pool = mp.Pool(n_proc)
     results = pool.imap(block_at_height, args)
     print("Got results object %s" % results)
-
-    for n in results:
-        pace_q.put(True)
-        if n is not None:
-            print("Processing results for height %d" % n[2])
-            merge_nulldatas_from_block_obj(*n)
 
 
 

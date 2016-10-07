@@ -8,6 +8,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 
 from .compatibility import bitcoind
 from .config import config
+from .pid_guard import add_engine_pidguard
 
 
 def hexlify(raw_bytes):
@@ -17,6 +18,7 @@ def hexlify(raw_bytes):
 
 
 engine = create_engine(config.DATABASE_URL)#, echo=True)
+add_engine_pidguard(engine)
 DBSession = scoped_session(sessionmaker(bind=engine))
 Base = declarative_base()
 
