@@ -35,7 +35,7 @@ if __name__ == "__main__":
     n_proc = args.n_processes
     print("Got args: %s" % args)
 
-    pace_q_size = 50
+    pace_q_size = 50 + n_proc
     pace_q = mp.Queue(pace_q_size)
     for i in range(pace_q_size - 2):
         pace_q.put(True)
@@ -74,7 +74,6 @@ if __name__ == "__main__":
     print("Scanning from %s" % start_scan_from)
 
     _ah = all_block_heights()
-    print(_ah[:10])
     existing_heights = set(_ah)
 
     args = [i for i in range(start_scan_from + 1, force_from + (144 * 365)) if i not in existing_heights]
