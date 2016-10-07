@@ -17,7 +17,7 @@ chmod 600 ${HOME}/.ssh/heroku_id_rsa
 echo "bitcoin.xk.io ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPQkI+B0IjWSEydHriSxN/LjwB9MP3YTYNneyJK2zTy9n1z5kmdGhxkhKePSSXUFMOIRhL7gxRbH4hgE33b58I0=" > ${HOME}/.ssh/known_hosts
 
 # Start the SSH tunnel if not already running
-SSH_CMD="ssh -f -i ${HOME}/.ssh/heroku_id_rsa -N -L 8332:127.0.0.1:8332 ${BITCOIN_SSH_USER}@${BITCOIN_HOST}"
+SSH_CMD="autossh -f -i ${HOME}/.ssh/heroku_id_rsa -N -L 8332:127.0.0.1:8332 ${BITCOIN_SSH_USER}@${BITCOIN_HOST}"
 
 PID=`pgrep -f "${SSH_CMD}"`
 if [ $PID ] ; then
