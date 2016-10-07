@@ -4,6 +4,7 @@ from binascii import unhexlify
 from time import sleep
 import logging
 from socket import timeout
+import http.client
 
 from sqlalchemy.exc import IntegrityError
 
@@ -43,6 +44,10 @@ if __name__ == "__main__":
         except timeout as e:
             logging.warning('Timeout... Creating new bitcoind')
             bitcoind = gen_bitcoind()
+        except http.client.CannotSendRequest as e:
+            session.rollback()
+            print(type(e), e)
+            sleep(60)
         except Exception as e:
             session.rollback()
             print(e, type(e))
