@@ -35,7 +35,7 @@ if __name__ == "__main__":
     n_proc = args.n_processes
     print("Got args: %s" % args)
 
-    pace_q_size = 50 + n_proc
+    pace_q_size = n_proc
     pace_q = mp.Queue(pace_q_size)
     for i in range(pace_q_size - 2):
         pace_q.put(True)
@@ -48,7 +48,7 @@ if __name__ == "__main__":
 
     def block_at_height(block_height):
         _bitcoind = gen_bitcoind()
-        # pace_q.get()
+        pace_q.get()
 
         while True:
             try:
@@ -86,3 +86,4 @@ if __name__ == "__main__":
 
     for r in results:
         print("Got results %s" % r)
+        pace_q.put(True)
