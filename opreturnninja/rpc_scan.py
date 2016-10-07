@@ -32,6 +32,7 @@ if __name__ == "__main__":
     parser.add_argument('--n-processes', help='How many processes to use, can be higher than CPU#', type=int, default=1)
     args = parser.parse_args()
     init_bh = args.block_height
+    n_proc = args.n_processes
     print("Got args: %s" % args)
 
     def get_block(bitcoind, block_hash, hex_summary=True):
@@ -69,7 +70,7 @@ if __name__ == "__main__":
     all_heights = all_block_heights()
 
     args = [i for i in range(start_scan_from + 1, force_from + (144 * 365))]
-    pool = multiprocessing.Pool(args.n_processes)
+    pool = multiprocessing.Pool(n_proc)
     results = pool.imap(block_at_height, args)
     print("Got results object %s" % results)
 
