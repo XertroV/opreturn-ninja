@@ -59,6 +59,6 @@ if __name__ == "__main__":
     print("Top block hash: %s" % best_block)
 
     args = [(i, (i >= force_from)) for i in range(init_bh, force_from + (144*365))]
-    pool = multiprocessing.Pool(50)
+    pool = multiprocessing.Pool(15)
     pool.starmap(block_at_height, args, chunksize=1)
 
