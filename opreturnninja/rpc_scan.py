@@ -63,7 +63,7 @@ if __name__ == "__main__":
                 logging.warning('Timeout... Creating new bitcoind')
             except Exception as e:
                 logging.warning("%d, %s, %s" % (block_height, e, type(e)))
-                sleep(5)
+                sleep(1)
             finally:
                 _bitcoind = gen_bitcoind()
 
