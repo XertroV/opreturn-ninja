@@ -42,6 +42,10 @@ def have_block(block_height, session=DBSession):
     return True
 
 
+def all_block_heights():
+    return [e.height for e in DBSession.query(Blocks).all()]
+
+
 class Nulldatas(Base):
     __tablename__ = 'nulldatas'
     id = Column(Integer, primary_key=True)
