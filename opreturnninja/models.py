@@ -16,6 +16,7 @@ def hexlify(raw_bytes):
 
 
 engine = create_engine(config.DATABASE_URL)#, echo=True)
+session_factory = lambda: scoped_session(sessionmaker(bind=engine))
 DBSession = scoped_session(sessionmaker(bind=engine))
 Base = declarative_base()
 
@@ -47,7 +48,7 @@ class Nulldatas(Base):
 
 
 def merge_nulldatas_from_block_obj(block, block_hash, block_height, verbose=False):
-    session = DBSession
+    session = session_factory()
     try:
         for tx_n, tx in enumerate(block.txs):
             for tx_out_n, tx_out in enumerate(tx.txs_out):
