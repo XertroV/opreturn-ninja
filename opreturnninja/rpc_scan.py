@@ -73,7 +73,9 @@ if __name__ == "__main__":
     start_scan_from = min(force_from, max_block_height(), init_bh)
     print("Scanning from %s" % start_scan_from)
 
-    existing_heights = set(all_block_heights())
+    _ah = all_block_heights()
+    print(_ah[:10])
+    existing_heights = set(_ah)
 
     args = [i for i in range(start_scan_from + 1, force_from + (144 * 365)) if i not in existing_heights]
     pool = mp.Pool(n_proc)
