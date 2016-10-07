@@ -77,6 +77,7 @@ if __name__ == "__main__":
     print("Scanning from %s" % start_scan_from)
 
     _ah = all_block_heights()
+    print("Reporting %d blocks scanned" % len(_ah))
     existing_heights = set(_ah)
 
     args = [i for i in range(start_scan_from + 1, force_from + (144 * 365)) if i not in existing_heights]
@@ -85,5 +86,5 @@ if __name__ == "__main__":
     print("Got results object %s" % results)
 
     for r in results:
-        print("Got results %s" % r)
+        print("Got results %s" % (r,))
         pace_q.put(True)
