@@ -42,6 +42,10 @@ def have_block(block_height, session=DBSession):
     return True
 
 
+def get_block_by_hash(block_hash, session=DBSession):
+    return session.query(Blocks).filter(Blocks.block_hash == block_hash).first()
+
+
 def max_block_height():
     _height = DBSession.query(func.max(Blocks.height)).one()[0]
     print(_height)

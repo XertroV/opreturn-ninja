@@ -8,7 +8,7 @@ import socket
 from pyramid.view import view_config
 
 from .constants import ELECTRUM_SERVERS, SECONDS_PER_REQUEST
-from .models import DBSession as session, Nulldatas
+from .models import DBSession as session, Nulldatas, get_block_by_hash
 from .compatibility import bitcoind
 
 ip_last_request_map = defaultdict(lambda: 0)
@@ -79,6 +79,9 @@ def api_block_view(request):
         block_hash = bitcoind.getblockhash(height)
     except:
         return error('unable to find hash for provided height')
+
+    if get_block_by_hash(block_hash) is None:
+        return error('block not scanned yet, unable to comply')
 
     try:
         block_details = bitcoind.getblock(block_hash)
