@@ -47,9 +47,9 @@ if __name__ == "__main__":
                 block = Block.parse(block_as_bytesio(_bitcoind, block_hash))
                 print("Got block: %s" % block)
                 return (block, block_hash, block_height)
-                # merge_nulldatas_from_block_obj(block, block_hash, block_height, verbose=True)
             except timeout as e:
                 logging.warning('Timeout... Creating new bitcoind')
+                _bitcoind = gen_bitcoind()
             except http.client.CannotSendRequest as e:
                 logging.warning("%d, %s, %s" % (block_height, e, type(e)))
                 sleep(5)
