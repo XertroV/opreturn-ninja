@@ -68,7 +68,8 @@ def api_view(request):
 @view_config(route_name='api_block', renderer='json')
 def api_block_view(request):
     def error(reason):
-        return {'error':reason}
+        print("Error'd for reason: %s" % reason)
+        return {'error': reason}
 
     try:
         height = int(request.matchdict['height'])
@@ -77,8 +78,8 @@ def api_block_view(request):
 
     try:
         block_hash = bitcoind.getblockhash(height)
-    except:
-        return error('unable to find hash for provided height')
+    except Exception as e:
+        return error('unable to find hash for provided height; %s' % e)
 
     if get_block_by_hash(block_hash) is None:
         return error('block not scanned yet, unable to comply')

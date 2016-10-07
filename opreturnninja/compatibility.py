@@ -5,6 +5,6 @@ from bitcoinrpc.authproxy import AuthServiceProxy
 from .config import config
 
 def gen_bitcoind():
-    return AuthServiceProxy("http://%s:%s@%s:%d"%(config.BITCOIN_RPC_USER, config.BITCOIN_RPC_PASSWORD, config.BITCOIN_RPC_HOST, config.BITCOIN_RPC_PORT))
+    return AuthServiceProxy("http://%s:%s@%s:%d"%(config.BITCOIN_RPC_USER, config.BITCOIN_RPC_PASSWORD, config.BITCOIN_RPC_HOST, config.BITCOIN_RPC_PORT), timeout=15)
 
 bitcoind = gen_bitcoind()
