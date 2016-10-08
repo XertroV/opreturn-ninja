@@ -9,9 +9,11 @@ from pyramid.view import view_config
 
 from .constants import ELECTRUM_SERVERS, SECONDS_PER_REQUEST
 from .models import DBSession as session, Nulldatas, get_block_by_hash, max_block_height, n_nulldatas
-from .compatibility import bitcoind
+from .compatibility import bitcoind, gen_bitcoind
 
 ip_last_request_map = defaultdict(lambda: 0)
+
+_bitcoind = gen_bitcoind()
 
 def rate_limit(f):
     def inner(request, *args, **kwargs):
@@ -67,6 +69,7 @@ def api_view(request):
 
 @view_config(route_name='api_block', renderer='json')
 def api_block_view(request):
+    nonlocal _bitcoind
     def error(reason):
         print("Error'd for reason: %s" % reason)
         return {'error': reason}
@@ -77,8 +80,9 @@ def api_block_view(request):
         return error('height parameter required')
 
     try:
-        block_hash = bitcoind.getblockhash(height)
+        block_hash = _bitcoind.getblockhash(height)
     except Exception as e:
+        _bitcoind = gen_bitcoind()
         return error('unable to find hash for provided height; %s' % e)
 
     if get_block_by_hash(block_hash) is None:
