@@ -69,7 +69,7 @@ def api_view(request):
 
 @view_config(route_name='api_block', renderer='json')
 def api_block_view(request):
-    nonlocal _bitcoind
+    global _bitcoind
     def error(reason):
         print("Error'd for reason: %s" % reason)
         return {'error': reason}
