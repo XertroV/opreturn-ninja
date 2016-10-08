@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="pyramid web application">
     <meta name="author" content="Pylons Project">
-    <!--<link rel="shortcut icon" href="${request.static_url('opreturnninja:static/pyramid-16x16.png')}">-->
+    <!--<link rel="shortcut icon" href="${request.static_path('opreturnninja:static/pyramid-16x16.png')}">-->
 
     <title>OpReturn.Ninja - Tx Pushing Tool</title>
 
@@ -14,7 +14,7 @@
     <link href="//oss.maxcdn.com/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this scaffold -->
-    <link href="${request.static_url('opreturnninja:static/theme.css')}" rel="stylesheet">
+    <link href="${request.static_path('opreturnninja:static/theme.css')}" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -104,6 +104,6 @@
     <script src="https://oss.maxcdn.com/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="https://oss.maxcdn.com/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular.min.js"></script>
-    <script src="${request.static_url('opreturnninja:static/controllers.js')}"></script>
+    <script src="${request.static_path('opreturnninja:static/controllers.js')}"></script>
   </body>
 </html>
