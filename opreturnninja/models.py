@@ -33,7 +33,7 @@ def provide_session(f):
 class Blocks(Base):
     __tablename__ = 'blocks'
     id = Column(Integer, primary_key=True)
-    block_hash = Column(String, unique=True)
+    block_hash = Column(String, unique=True, index=True)
     height = Column(Integer, index=True)
     prev_block_hash = Column(String)
 
@@ -72,6 +72,10 @@ class Nulldatas(Base):
     tx_out_n = Column(Integer)
     timestamp = Column(Integer)
     sender = Column(String)
+
+
+def n_nulldatas():
+    return DBSession.query(func.count(Nulldatas.id)).scalar()
 
 
 def merge_nulldatas_from_block_obj(block, block_hash, block_height, verbose=False, session=DBSession):

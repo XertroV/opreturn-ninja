@@ -8,7 +8,7 @@ import socket
 from pyramid.view import view_config
 
 from .constants import ELECTRUM_SERVERS, SECONDS_PER_REQUEST
-from .models import DBSession as session, Nulldatas, get_block_by_hash
+from .models import DBSession as session, Nulldatas, get_block_by_hash, max_block_height, n_nulldatas
 from .compatibility import bitcoind
 
 ip_last_request_map = defaultdict(lambda: 0)
@@ -102,6 +102,11 @@ def index_view(request):
     return {}
 
 
-
+@view_config(route_name='info', renderer='json')
+def info_view(request):
+    return {
+        'max_block': max_block_height(),
+        'n_nulldatas': n_nulldatas()
+    }
 
 
