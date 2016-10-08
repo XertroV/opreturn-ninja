@@ -9,5 +9,6 @@ def main(global_config, **settings):
     config.add_route('index', '/')
     config.add_route('api', '/api')
     config.add_route('api_block', '/block/{height}')
+    config.add_route('info', '/info')
     config.scan()
     return config.make_wsgi_app()
