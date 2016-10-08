@@ -54,7 +54,6 @@ if __name__ == "__main__":
             try:
                 block_hash = _bitcoind.getblockhash(block_height)
                 block = Block.parse(block_as_bytesio(_bitcoind, block_hash))
-                print("Got block: %s" % block)
                 ans = (block, block_hash, block_height)
                 print("Processing results for height %d" % ans[2])
                 merge_nulldatas_from_block_obj(*ans)
