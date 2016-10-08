@@ -78,7 +78,7 @@ def n_nulldatas():
     return DBSession.query(func.count(Nulldatas.id)).scalar()
 
 
-def merge_nulldatas_from_block_obj(block, block_hash, block_height, verbose=False, session=DBSession):
+def merge_nulldatas_from_block_obj(block, block_hash, block_height, verbose=True, session=DBSession):
     try:
         if get_block_by_hash(block_hash) is not None:
             print("already merged block %d, %s" (block_height, block_hash))
