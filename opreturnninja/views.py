@@ -13,7 +13,7 @@ from .compatibility import bitcoind, gen_bitcoind
 
 ip_last_request_map = defaultdict(lambda: 0)
 
-_bitcoind = gen_bitcoind()
+_bitcoind = gen_bitcoind(timeout=2)
 
 def rate_limit(f):
     def inner(request, *args, **kwargs):
