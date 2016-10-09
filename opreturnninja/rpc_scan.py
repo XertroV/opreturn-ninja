@@ -52,7 +52,7 @@ if __name__ == "__main__":
         return BytesIO(unhexlify(get_block(bitcoind, block_hash, False)))
 
     def block_at_height(block_height):
-        _bitcoind = gen_bitcoind()
+        _bitcoind = gen_bitcoind(timeout=5)
         pace_q.get()
 
         while True:
