@@ -81,7 +81,7 @@ def n_nulldatas():
 def merge_nulldatas_from_block_obj(block, block_hash, block_height, verbose=True, session=DBSession):
     try:
         if get_block_by_hash(block_hash) is not None:
-            print("already merged block %d, %s" (block_height, block_hash))
+            print("already merged block %d, %s" % (block_height, block_hash))
             return  # we have this block already
         for tx_n, tx in enumerate(block.txs):
             for tx_out_n, tx_out in enumerate(tx.txs_out):

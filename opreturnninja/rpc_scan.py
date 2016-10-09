@@ -57,7 +57,7 @@ if __name__ == "__main__":
             try:
                 block_hash = _bitcoind.getblockhash(block_height)
                 block = Block.parse(block_as_bytesio(_bitcoind, block_hash))
-                ans = (block, block_hash, block_height)
+                ans = (block, block_hash, block_height)  # order important for merge_nulldatas
                 logging.info("Processing results for height %d" % ans[2])
                 merge_nulldatas_from_block_obj(*ans)
                 return ans
