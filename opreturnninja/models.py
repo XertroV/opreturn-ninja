@@ -97,7 +97,7 @@ def merge_nulldatas_from_block_obj(block, block_hash, block_height, verbose=True
                             sender_address = id_tx_json['vout'][id_tx_reference.previous_index]['scriptPubKey']['addresses'][0]
                         session.merge(Nulldatas(in_block_hash=block_hash, txid=hexlify(tx.hash()[::-1]), script=hexlify(tx_out.script), tx_n=tx_n, tx_out_n=tx_out_n, timestamp=block.timestamp, sender=sender_address))
                         if verbose:
-                            logging.info(script_object, tx.hash(), block_height)
+                            logging.info("%s, %s, %s" % (script_object, tx.hash(), block_height))
         session.merge(Blocks(block_hash=block_hash, height=block_height, prev_block_hash=block.previous_block_id()))
     except Exception as e:
         session.rollback()
@@ -105,7 +105,7 @@ def merge_nulldatas_from_block_obj(block, block_hash, block_height, verbose=True
     else:
         session.commit()
     if verbose:
-        logging.info('Scanned', block_height)
+        logging.info('Scanned %s' % block_height)
 
 Index('index_nulldatas', Nulldatas.in_block_hash, Nulldatas.txid, Nulldatas.tx_n, Nulldatas.tx_out_n, unique=True)
 
