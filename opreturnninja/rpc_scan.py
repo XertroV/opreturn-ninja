@@ -36,7 +36,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     init_bh = args.block_height
     n_proc = args.n_processes
-    print("Got args: %s" % args)
+    logging.info("Got args: %s" % args)
 
     pace_q_size = n_proc
     pace_q = mp.Queue(pace_q_size)
@@ -74,21 +74,21 @@ if __name__ == "__main__":
     best_block = bitcoind.getbestblockhash()
     force_from = bitcoind.getblock(best_block)['height'] - 144  # force rescan of last day at least
     # TODO: figure out how to ensure we always have the correct nulldatas available in case of reorg
-    print("Top block hash: %s" % best_block)
+    logging.info("Top block hash: %s" % best_block)
 
     start_scan_from = min(force_from, max_block_height(), init_bh)
-    print("Scanning from %s" % start_scan_from)
+    logging.info("Scanning from %s" % start_scan_from)
 
     _ah = all_block_heights()
-    print("Reporting %d blocks scanned" % len(_ah))
+    logging.info("Reporting %d blocks scanned" % len(_ah))
     existing_heights = set(_ah)
 
     args = [i for i in range(start_scan_from + 1, force_from + (144 * 365)) if i not in existing_heights]
     pool = mp.Pool(n_proc)
     results = pool.imap(block_at_height, args)
-    print("Got results object %s" % results)
+    logging.info("Got results object %s" % results)
 
     for r in results:
-        print("Finished processing %s, %s" % (r[1], r[2]))
+        logging.info("Finished processing %s, %s" % (r[1], r[2]))
         pace_q.put(True)
     pool.join()
