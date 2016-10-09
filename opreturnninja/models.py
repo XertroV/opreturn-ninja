@@ -55,11 +55,6 @@ def max_block_height():
 
 def all_block_heights():
     _heights = list(map(lambda e: e[0], DBSession.query(Blocks.height).all()))
-    try:
-        logging.info(type(_heights))
-        logging.info(_heights[0])
-    except:
-        pass
     return _heights
 
 
