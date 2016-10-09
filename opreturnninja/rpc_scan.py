@@ -2,6 +2,8 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 import argparse
+import traceback
+import sys
 from io import BytesIO
 from binascii import unhexlify
 from time import sleep
@@ -63,16 +65,25 @@ if __name__ == "__main__":
                 return ans
             except timeout as e:
                 logging.warning('%d, Timeout... Creating new bitcoind' % block_height)
+            except http.client.CannotSendRequest as e:
+                logging.warning("Got CannotSendRequest.")
+                traceback.print_tb(e.__traceback__)
             except Exception as e:
                 logging.warning("%d, %s, %s" % (block_height, e, type(e)))
             finally:
                 _bitcoind = gen_bitcoind()
-                logging.info("Regen'd bitcoind")
+                logging.info("%d; Regen'd bitcoind" % block_height)
                 sleep(0.1)
 
-    bitcoind = gen_bitcoind(timeout=3)
-    best_block = bitcoind.getbestblockhash()
-    force_from = bitcoind.getblock(best_block)['height'] - 144  # force rescan of last day at least
+    bitcoind = gen_bitcoind(timeout=15)
+
+    try:
+        best_block = bitcoind.getbestblockhash()
+        force_from = bitcoind.getblock(best_block)['height'] - 144  # force rescan of last day at least
+    except Exception as e:
+        logging.error("Got exception during startup: %s" % e)
+        sys.exit(1)
+
     # TODO: figure out how to ensure we always have the correct nulldatas available in case of reorg
     logging.info("Top block hash: %s" % best_block)
 
