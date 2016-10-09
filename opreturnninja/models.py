@@ -49,12 +49,12 @@ def get_block_by_hash(block_hash, session=DBSession):
     return session.query(Blocks).filter(Blocks.block_hash == block_hash).first()
 
 
-def max_block_height():
-    _height = DBSession.query(func.max(Blocks.height)).one()[0]
+def max_block_height(session=DBSession):
+    _height = session.query(func.max(Blocks.height)).one()[0]
     return _height
 
-def all_block_heights():
-    _heights = list(map(lambda e: e[0], DBSession.query(Blocks.height).all()))
+def all_block_heights(session=DBSession):
+    _heights = list(map(lambda e: e[0], session.query(Blocks.height).all()))
     return _heights
 
 
@@ -74,7 +74,7 @@ def n_nulldatas():
     return DBSession.query(func.count(Nulldatas.id)).scalar()
 
 
-def merge_nulldatas_from_block_obj(block, block_hash, block_height, verbose=True, session=DBSession):
+def merge_nulldatas_from_block_obj(block, block_hash, block_height, verbose=True, session=DBSession, bitcoind=bitcoind):
     try:
         if get_block_by_hash(block_hash) is not None:
             logging.info("already merged block %d, %s" % (block_height, block_hash))
