@@ -117,7 +117,8 @@ def info_view(request):
     return {
         'max_block': max_block_height(),
         'n_nulldatas': n_nulldatas(),
-        'getinfo': getinfo,
+        'bitcoind_height': getinfo['blocks'],
+        'bitcoind_errors': getinfo['errors'],
     }
 
 
