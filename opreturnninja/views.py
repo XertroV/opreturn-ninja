@@ -89,6 +89,11 @@ def api_block_view(request):
         return error('block not scanned yet, unable to comply')
 
     try:
+        getinfo = _bitcoind.getinfo()
+    except:
+        return error("Cannot getinfo bitcoind")
+
+    try:
         block_details = bitcoind.getblock(block_hash)
     except:
         return error('unable to retrieve block details')
@@ -98,6 +103,7 @@ def api_block_view(request):
         'height': height,
         'timestamp': block_details['time'],
         'op_returns': [{'txid': n.txid, 'tx_n': n.tx_n, 'tx_out_n': n.tx_out_n, 'script': n.script, 'sender': n.sender, 'timestamp': n.timestamp} for n in nulldatas],
+        'getinfo': getinfo,
     }
 
 

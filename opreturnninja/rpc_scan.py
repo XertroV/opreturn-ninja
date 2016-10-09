@@ -1,3 +1,6 @@
+import logging
+logging.basicConfig(level=logging.INFO)
+
 import argparse
 from io import BytesIO
 from binascii import unhexlify
@@ -55,15 +58,16 @@ if __name__ == "__main__":
                 block_hash = _bitcoind.getblockhash(block_height)
                 block = Block.parse(block_as_bytesio(_bitcoind, block_hash))
                 ans = (block, block_hash, block_height)
-                print("Processing results for height %d" % ans[2])
+                logging.info("Processing results for height %d" % ans[2])
                 merge_nulldatas_from_block_obj(*ans)
                 return ans
             except timeout as e:
-                logging.warning('Timeout... Creating new bitcoind')
+                logging.warning('%d, Timeout... Creating new bitcoind' % block_height)
             except Exception as e:
                 logging.warning("%d, %s, %s" % (block_height, e, type(e)))
             finally:
                 _bitcoind = gen_bitcoind()
+                logging.info("Regen'd bitcoind")
                 sleep(0.1)
 
     bitcoind = gen_bitcoind(timeout=3)
