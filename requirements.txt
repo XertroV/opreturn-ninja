@@ -1,3 +1,4 @@
+psychopg2
 Chameleon==2.25
 dill==0.2.5
 Mako==1.0.4
