@@ -86,7 +86,7 @@ if __name__ == "__main__":
         logging.info("Reporting %d blocks scanned" % len(_ah))
         existing_heights = set(_ah)
 
-        args = list([i for i in range(start_scan_from + 1, min(430000, force_from + (144 * 365))) if i not in existing_heights])
+        args = list([i for i in range(start_scan_from + 1, max(430000, force_from + (144 * 365))) if i not in existing_heights])
         logging.info('Have a list of %d args for `block_at_height`' % len(args))
         pool = mp.Pool(n_proc)
         results = pool.imap(block_at_height, args)
