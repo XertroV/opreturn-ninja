@@ -112,6 +112,7 @@ def info_view(request):
     try:
         getinfo = _bitcoind.getinfo()
     except:
+        _bitcoind = gen_bitcoind(timeout=2)
         return {'error': "Cannot getinfo bitcoind"}
 
     return {
