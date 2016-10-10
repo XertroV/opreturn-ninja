@@ -108,12 +108,13 @@ def index_view(request):
 
 @view_config(route_name='info', renderer='json')
 def info_view(request):
+    global _bitcoind
 
     try:
         getinfo = _bitcoind.getinfo()
-    except:
+    except Exception as e:
         _bitcoind = gen_bitcoind(timeout=2)
-        return {'error': "Cannot getinfo bitcoind"}
+        return {'error': "Cannot getinfo bitcoind, %s, %s" % (e, type(e))}
 
     return {
         'max_block': max_block_height(),
