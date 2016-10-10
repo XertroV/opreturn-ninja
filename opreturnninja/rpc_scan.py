@@ -94,7 +94,6 @@ if __name__ == "__main__":
 
         for r in results:
             logging.info("Finished processing %s, %s" % (r[1], r[2]))
-        pool.join()
 
 
     if args.cprofile:
