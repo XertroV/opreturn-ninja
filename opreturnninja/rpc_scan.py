@@ -16,6 +16,7 @@ import functools
 from sqlalchemy.exc import IntegrityError
 
 from pycoin.block import Block
+from pycoin.tx.script import ScriptError
 
 from .models import DBSession, merge_nulldatas_from_block_obj, have_block, max_block_height, all_block_heights
 from .compatibility import gen_bitcoind
@@ -44,6 +45,9 @@ def block_at_height(block_height):
             logging.warning('%d, Timeout... Creating new bitcoind' % block_height)
         except http.client.CannotSendRequest as e:
             logging.warning("Got CannotSendRequest.")
+            traceback.print_tb(e.__traceback__)
+        except ScriptError as e:
+            logging.error("Script parse error!")
             traceback.print_tb(e.__traceback__)
         except Exception as e:
             logging.warning("%d, %s, %s" % (block_height, e, type(e)))

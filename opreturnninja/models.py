@@ -39,6 +39,12 @@ class Blocks(Base):
     prev_block_hash = Column(String)
 
 
+# class Heights(Base):
+#     __tablename__ = 'heights'
+#     height = Column(Integer, primary_key=True)
+#     hash = Column(String(64), unique=True, index=True)
+
+
 def have_block(block_height, session=DBSession):
     if len(session.query(Blocks).filter(Blocks.height == block_height).all()) == 0:
         return False
