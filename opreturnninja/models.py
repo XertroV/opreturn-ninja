@@ -2,6 +2,7 @@ from binascii import hexlify as _hexlify
 import logging
 
 from pycoin.tx.pay_to import script_obj_from_script, ScriptNulldata
+from pycoin.tx.script import ScriptError
 
 from sqlalchemy import Column, Integer,  String, create_engine, Index, func
 from sqlalchemy.ext.declarative import declarative_base
@@ -88,7 +89,11 @@ def merge_nulldatas_from_block_obj(block, block_hash, block_height, verbose=True
         for tx_n, tx in enumerate(block.txs):
             for tx_out_n, tx_out in enumerate(tx.txs_out):
                 if tx_out.script[0:1] == b'\x6a':
-                    script_object = script_obj_from_script(tx_out.script)
+                    try:
+                        script_object = script_obj_from_script(tx_out.script)
+                    except ScriptError as e:
+                        logging.warning("Found OP_RETURN tx with bad nulldata: %s, %d" % (tx.hash()[::-1], tx_out_n))
+                        continue
                     if type(script_object) == ScriptNulldata:
                         id_tx_reference = tx.txs_in[0]  # tx containing the identity
                         if id_tx_reference.is_coinbase():
